@@ -13,39 +13,62 @@
   <h1>AJAX Calls using Plain Javascript</h1>
 
   <p>
+    This is an example from <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX/Getting_Started"
+      target="blank">the AJAX MDN WebDoc</a>
+  </p>
+
+  <p>
     The button below makes a simple request to test.html
   </p>
 
   <p>
     <button id="ajaxButton" type="button">Make a request</button>
   </p>
-  
+
   <script>
     (function () {
       var httpRequest;
       document.getElementById("ajaxButton").addEventListener('click', makeRequest);
 
       function makeRequest() {
+        // create a new XMLHttpRequest object
         httpRequest = new XMLHttpRequest();
 
         if (!httpRequest) {
           alert('Giving up :( Cannot create an XMLHTTP instance');
           return false;
         }
+        // After making a request, you will receive a response back. At this stage, you need to 
+        // tell the XMLHttp request object which JavaScript function will handle the response, 
+        // by setting the onreadystatechange property of the object and naming it after the 
+        // function to call when the request changes state, like this:
         httpRequest.onreadystatechange = alertContents;
+
+        // Next, after declaring what happens when you receive the response, you need to actually 
+        // make the request, by calling the open() and send() methods of the HTTP request 
+        // object, like this:
         httpRequest.open('GET', 'test.html');
         httpRequest.send();
-      }
+      } // function makeRequest()
 
       function alertContents() {
+        // readyState values
+        //   0	UNSENT	          Client has been created. open() not called yet.
+        //   1	OPENED	          open() has been called.
+        //   2	HEADERS_RECEIVED	send() has been called, and headers and status are available.
+        //   3	LOADING	          Downloading; responseText holds partial data.
+        //   4	DONE	            The operation is complete.
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          // the response was received
           if (httpRequest.status === 200) {
+            // the call was successful
             alert(httpRequest.responseText);
           } else {
-            alert('There was a problem with the request.');
+            // there was something wrong 
+            alert('There was a problem with the request. Status was ' + httpRequest.status);
           }
-        }
-      }
+        } // if (httpRequest.readyState === XMLHttpRequest.DONE)
+      } // function alertContents()
     })();
   </script>
 </body>
