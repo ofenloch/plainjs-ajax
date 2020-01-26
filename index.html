@@ -53,22 +53,26 @@
       } // function makeRequest()
 
       function alertContents() {
-        // readyState values
-        //   0	UNSENT	          Client has been created. open() not called yet.
-        //   1	OPENED	          open() has been called.
-        //   2	HEADERS_RECEIVED	send() has been called, and headers and status are available.
-        //   3	LOADING	          Downloading; responseText holds partial data.
-        //   4	DONE	            The operation is complete.
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-          // the response was received
-          if (httpRequest.status === 200) {
-            // the call was successful
-            alert(httpRequest.responseText);
-          } else {
-            // there was something wrong 
-            alert('There was a problem with the request. Status was ' + httpRequest.status);
-          }
-        } // if (httpRequest.readyState === XMLHttpRequest.DONE)
+        try {
+          // readyState values
+          //   0	UNSENT	          Client has been created. open() not called yet.
+          //   1	OPENED	          open() has been called.
+          //   2	HEADERS_RECEIVED	send() has been called, and headers and status are available.
+          //   3	LOADING	          Downloading; responseText holds partial data.
+          //   4	DONE	            The operation is complete.
+          if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            // the response was received
+            if (httpRequest.status === 200) {
+              // the call was successful
+              alert(httpRequest.responseText);
+            } else {
+              // there was something wrong 
+              alert('There was a problem with the request. Status was ' + httpRequest.status);
+            }
+          } // if (httpRequest.readyState === XMLHttpRequest.DONE)
+        } catch (exception) {
+          alert('Caught Exception: ' + exception.description);
+        }
       } // function alertContents()
     })();
   </script>
