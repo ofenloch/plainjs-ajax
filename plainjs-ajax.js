@@ -43,3 +43,120 @@ function showSearchResults(event) {
         }
     } // if (httpRequest.readyState === XMLHttpRequest.DONE)
 } // function showSearchResults(event)
+
+function doAdvancedSearch() {
+    let baseUrl = 'https://my-json-server.typicode.com/ofenloch/MyJSONServer';
+    let url = baseUrl + '/db';
+    ajaxCallWithXMLHttpRequest('GET', url, processAdvancedSearch);
+}
+
+/**
+ * make an asynchronous call to the given URL and process response with the given callback function
+ * @param {*} method 
+ * @param {*} url 
+ * @param {*} callback 
+ */
+function ajaxCallWithXMLHttpRequest(method, url, callback) {
+    console.log('sending "' + url + '" ...');
+    // create a new XMLHttpRequest object
+    let oReq = new XMLHttpRequest();
+    if (!oReq) {
+        alert('Giving up :( Cannot create an XMLHTTP instance');
+        return false;
+    }
+    // register event handlers for downloads
+    oReq.addEventListener('progress', handleDownloadUpdateProgress);
+    oReq.addEventListener('load', handleTransferComplete);
+    oReq.addEventListener('error', handleTransferFailed);
+    oReq.addEventListener('abort', handleTransferCanceled);
+
+    // register event handlers for uploads
+    oReq.upload.addEventListener('progress', handleUploadUpdateProgress);
+    oReq.upload.addEventListener('load', handleTransferComplete);
+    oReq.upload.addEventListener('error', handleTransferFailed);
+    oReq.upload.addEventListener('abort', handleTransferCanceled);
+
+    // register event handler for the response
+    oReq.onreadystatechange = callback;
+
+    // finally make the request
+    oReq.open(method, url);
+    oReq.send();
+} // function ajaxCallWithXMLHttpRequest(method, url, callback)
+
+// progress on transfers from the server to the client (downloads)
+function handleDownloadUpdateProgress(oEvent) {
+    if (oEvent.lengthComputable) {
+        var percentComplete = oEvent.loaded / oEvent.total * 100;
+        console.log('loaded ' + percentComplete + '%');
+        // ...
+    } else {
+        console.log('loading ...');
+        // ...
+    }
+}
+
+// progress on transfers from the server to the client (downloads)
+function handleUploadUpdateProgress(oEvent) {
+    if (oEvent.lengthComputable) {
+        var percentComplete = oEvent.loaded / oEvent.total * 100;
+        console.log('sent ' + percentComplete + '%');
+        // ...
+    } else {
+        console.log('sending ...');
+        // ...
+    }
+}
+
+// transfer has completed
+function handleTransferComplete(oEvent) {
+    console.log('The transfer is complete.');
+}
+
+// transfr has failed
+function handleTransferFailed(oEvent) {
+    console.log('An error occurred while transferring the file.');
+}
+
+// transfer has been canceled
+function handleTransferCanceled(oEvent) {
+    console.log('The transfer has been canceled by the user.');
+}
+
+function processAdvancedSearch(oEvent) {
+    let request = oEvent.target;
+    console.log('request.readyState is ' + request.readyState);
+    if (request.readyState === request.DONE) {
+        let searchString = document.getElementById('searchString').value;
+        let jsonData = JSON.parse(request.responseText);
+        // the response was received
+        let unformatted = document.getElementById('asUnformattedText');
+        if (request.status === 200) {
+            // the call was successful         
+            unformatted.innerHTML = 'Unformatted Response Test:\n' + searchInJSON(jsonData, searchString);
+        } else {
+            // there was something wrong 
+            unformatted.innerHTML = 'Unformatted Response Test:\n' + '{ "error": "There was a problem with the request.", "status": ' + request.status + '}';
+        }
+    } // if (httpRequest.readyState === XMLHttpRequest.DONE)
+} // function processAdvancedSearch(oEvent)
+
+function searchInJSON(oJSON, searchString) {
+    let keys = Object.keys(oJSON);
+    let nKeys = keys.length;
+    for (let i=0; i< nKeys; i++) {
+        let key = keys[i];
+        console.log('processing key "' + key + '" ...');
+        let currentJSON = oJSON[key];
+        let currentString = JSON.stringify(currentJSON);
+        if (currentString.includes(searchString)) {
+            console.log(' found search string in ' + currentString);
+            let searchResult = '"' + key + '" : ';
+            searchResult += '"' + searchInJSON(currentJSON, searchString) + '"';
+            return searchResult;
+        } else {
+            continue;
+        }
+    }
+    return '';
+}
