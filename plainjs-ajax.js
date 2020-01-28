@@ -33,14 +33,13 @@ function showSearchResults(event) {
     console.log('request.readyState is ' + request.readyState);
     if (request.readyState === XMLHttpRequest.DONE) {
         // the response was received
+        let unformatted = document.getElementById('asUnformattedText');
         if (request.status === 200) {
-            // the call was successful
-            //alert(request.responseText);
-            let unformatted = document.getElementById('asUnformattedText');
+            // the call was successful         
             unformatted.innerHTML = 'Unformatted Response Test:\n' + request.responseText;
         } else {
             // there was something wrong 
-            alert('There was a problem with the request. Status was ' + request.status);
+            unformatted.innerHTML = '{ "error": "There was a problem with the request.", "status": ' + request.status + '}';
         }
     } // if (httpRequest.readyState === XMLHttpRequest.DONE)
 } // function showSearchResults(event)
