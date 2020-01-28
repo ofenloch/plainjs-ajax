@@ -9,7 +9,7 @@
 </head>
 
 <body>
-
+  <script src="/plainjs-ajax.js"></script>
   <h1>AJAX Calls using Plain Javascript</h1>
 
   <h2>The MDN Example</h2>
@@ -107,66 +107,7 @@
         }
       } // function alertContents()
     })();
-
-
-
-    /**
-      * send an AJAX call to a remote server with an "search term" given by the user
-      */
-    function doSearch() {
-      var searchString = document.getElementById('searchString').value;
-      // create a new XMLHttpRequest object
-      myXMLHttpRequest = new XMLHttpRequest();
-      if (!myXMLHttpRequest) {
-        alert('Giving up :( Cannot create an XMLHTTP instance');
-        return false;
-      }
-      // After making a request, you will receive a response back. At this stage, you need to 
-      // tell the XMLHttp request object which JavaScript function will handle the response, 
-      // by setting the onreadystatechange property of the object and naming it after the 
-      // function to call when the request changes state, like this:
-      myXMLHttpRequest.onreadystatechange = showSearchResults;
-      // onreadystatechange sets an EventHandler that is called whenever the readyState attribute changes.
-
-      // Next, after declaring what happens when you receive the response, you need to actually 
-      // make the request, by calling the open() and send() methods of the HTTP request 
-      // object, like this:
-      myXMLHttpRequest.open('GET', 'https://my-json-server.typicode.com/ofenloch/MyJSONServer/' + searchString);
-      myXMLHttpRequest.send();
-    } // function doSearch()
-
-    /**
-      * The function specified by XMLHttpRequest.onreadystatechange
-      * is an event handler. So it gets an event passed as argument.
-      * The event's target is the originating XMLHttpRequest object
-      */
-    function showSearchResults(event) {
-      let request = event.target;
-      console.log('request.readyState is ' + request.readyState);
-      if (request.readyState === XMLHttpRequest.DONE) {
-            // the response was received
-            if (request.status === 200) {
-              // the call was successful
-              //alert(request.responseText);
-              let unformatted = document.getElementById('asUnformattedText');
-              unformatted.innerHTML = 'Unformatted Response Test:\n' + request.responseText;
-            } else {
-              // there was something wrong 
-              alert('There was a problem with the request. Status was ' + request.status);
-            }
-          } // if (httpRequest.readyState === XMLHttpRequest.DONE)
-    } // function showSearchResults(event)
   </script>
 </body>
 
 </html>
-
-<!--
-  This was sent by my brwoser
-  
-  https://www.google.com/complete/search?q&cp=0&client=psy-ab&xssi=t&gs_ri=gws-wiz&hl=de&authuser=0&pq=google%20search%20api%20example&psi=5dstXrupNtLLwAK29qK4BQ.1580063718432&ei=5dstXrupNtLLwAK29qK4BQ
-  
-  curl 'https://www.google.com/complete/search?q&cp=0&client=psy-ab&xssi=t&gs_ri=gws-wiz&hl=de&authuser=0&pq=google%20search%20api%20example&psi=5dstXrupNtLLwAK29qK4BQ.1580063718432&ei=5dstXrupNtLLwAK29qK4BQ' -H 'authority: www.google.com' -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.44' -H 'accept: */*' -H 'sec-fetch-site: same-origin' -H 'sec-fetch-mode: cors' -H 'referer: https://www.google.com/' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H 'cookie: CGIC=CgVvcGVyYSJ8dGV4dC9odG1sLGFwcGxpY2F0aW9uL3hodG1sK3htbCxhcHBsaWNhdGlvbi94bWw7cT0wLjksaW1hZ2Uvd2VicCxpbWFnZS9hcG5nLCovKjtxPTAuOCxhcHBsaWNhdGlvbi9zaWduZWQtZXhjaGFuZ2U7dj1iMztxPTAuOQ; CONSENT=WP.282ec7; ANID=AHWqTUliBThG6f12OKODza_geVMTETmkPGD4HOJMT7St7v5YkxYKc0r1hQR1PZ2o; NID=196=As5s1VuvmADFkwTmTpv_T9KFn2rCEullqKPJzD3cmfvtuZvZ44Jlnr2thauszAeSPX9RfUoCdy1fFbzyU7gT4X33AKA9pUNZ9TSfhd-bNgNPJhyPJFnqJ-Kkn5l3-UHWblRlyyGf-M3-hI8PTgNyAh2NygAnsQE_R0kKBEDFQLM; DV=Y7Sko6z8ylgooLzqnEwKQNDhbSQy_lagFLPp11GAXgAAAAA; 1P_JAR=2020-01-26-18' --compressed
-
-  fetch("https://www.google.com/complete/search?q&cp=0&client=psy-ab&xssi=t&gs_ri=gws-wiz&hl=de&authuser=0&pq=google%20search%20api%20example&psi=5dstXrupNtLLwAK29qK4BQ.1580063718432&ei=5dstXrupNtLLwAK29qK4BQ", {"credentials":"include","headers":{"accept":"*/*","accept-language":"en-US,en;q=0.9","sec-fetch-mode":"cors","sec-fetch-site":"same-origin"},"referrer":"https://www.google.com/","referrerPolicy":"origin","body":null,"method":"GET","mode":"cors"});
--->
