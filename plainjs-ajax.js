@@ -144,7 +144,7 @@ function processAdvancedSearch(oEvent) {
 function searchInJSON(oJSON, searchString) {
     let keys = Object.keys(oJSON);
     let nKeys = keys.length;
-    for (let i=0; i< nKeys; i++) {
+    for (let i = 0; i < nKeys; i++) {
         let key = keys[i];
         console.log('processing key "' + key + '" ...');
         let currentJSON = oJSON[key];
@@ -152,8 +152,16 @@ function searchInJSON(oJSON, searchString) {
         if (currentString.includes(searchString)) {
             console.log(' found search string in ' + currentString);
             let searchResult = '"' + key + '" : ';
-            searchResult += '"' + searchInJSON(currentJSON, searchString) + '"';
-            return searchResult;
+            // I just can't figure out how to determine if I am at the lowest level...
+            let currentPropertyNames = Object.getOwnPropertyNames(currentJSON);
+            let currentKeys = Object.keys(currentJSON);
+            let nCurrentKeys = currentKeys.length;
+            if (nCurrentKeys < 1) {
+                return JSON.stringify(currentJSON);
+            } else {
+                searchResult += '"' + searchInJSON(currentJSON, searchString) + '"';
+                return searchResult;
+            }
         } else {
             continue;
         }
